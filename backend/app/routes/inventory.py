@@ -211,7 +211,8 @@ def add_supplier():
     conn = get_db_connection()
     try:
         cur = conn.cursor()
-        cur.execute("INSERT INTO suppliers (supplier_name, phone, city, store_id) VALUES (%s, %s, %s, %s)", (name, phone, city, store_id))
+        # Map form 'city' to DB 'address'
+        cur.execute("INSERT INTO suppliers (supplier_name, phone, address, store_id) VALUES (%s, %s, %s, %s)", (name, phone, city, store_id))
         conn.commit()
         flash('Supplier added successfully', 'success')
     except Exception as e:
