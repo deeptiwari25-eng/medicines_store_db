@@ -294,6 +294,61 @@
         gap: 10px;
         margin-top: 12px;
     }
+
+    @media (max-width: 992px) {
+        .header-section {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        .header-section .btn-primary {
+            width: 100%;
+        }
+
+        .supplier-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .supplier-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .supplier-card {
+            padding: 14px;
+        }
+
+        .card-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-action,
+        .btn-action.delete {
+            width: 100%;
+            flex: 1 1 auto;
+        }
+
+        .form-row,
+        .quick-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quick-actions .btn-secondary,
+        .quick-actions .btn-success {
+            width: 100%;
+        }
+
+        .modal-content {
+            width: 94vw;
+            max-width: 94vw;
+            padding: 14px;
+        }
+    }
 </style>
 
 <script>

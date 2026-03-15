@@ -2274,3 +2274,42 @@ iframe {
         font-size: 1.05rem;
     }
 }
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .charts-section,
+    .tables-section {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .chart-container {
+        height: 240px;
+    }
+
+    .card-header {
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .card-header .btn-primary {
+        width: 100%;
+        text-align: center;
+        padding: 8px 10px;
+    }
+
+    .kpi-card {
+        align-items: center;
+    }
+
+    .kpi-info h2 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+        word-break: break-word;
+    }
+}
