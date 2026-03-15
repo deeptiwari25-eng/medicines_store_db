@@ -5,20 +5,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_db_connection():
+    # Use DATABASE_URL from environment variable
+    db_url = os.environ.get('DATABASE_URL')
+    
+    if not db_url:
+        raise ValueError("DATABASE_URL environment variable is missing from Vercel settings.")
+
     try:
-        # Use DATABASE_URL from environment variable (Production & Development via .env)
-        db_url = os.environ.get('DATABASE_URL')
-        
-        if db_url:
-            # Ensure SSL mode is enabled for Neon/Vercel if not already in URL
-            if 'sslmode' not in db_url and 'localhost' not in db_url:
-                db_url += '?sslmode=require'
-                
-            conn = psycopg2.connect(db_url)
-            return conn
-        else:
-            print("Error: DATABASE_URL environment variable is not set.")
-            return None
+        # Ensure SSL mode is enabled for Neon/Vercel if not already in URL
+        if 'sslmode' not in db_url and 'localhost' not in db_url:
+            db_url += '?sslmode=require'
+            
+        conn = psycopg2.connect(db_url)
+        return conn
     except Exception as e:
-        print(f"Database connection failed: {e}")
-        return None
+        # Re-raise the exception so the calling function can display the exact error
+        raise e
