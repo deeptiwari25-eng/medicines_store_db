@@ -15,7 +15,7 @@
                     <input type="text" id="inventorySearch" onkeyup="filterTable()"
                         placeholder="Search by name, category, SKU...">
                 </div>
-                <button class="btn-primary" onclick="openModal('addMedicineModal')">
+                <button class="btn-primary inventory-add-btn" onclick="openModal('addMedicineModal')">
                     <i class="fas fa-plus"></i> Add Product
                 </button>
             </div>
@@ -56,9 +56,14 @@
     <!-- Inventory Table Card -->
     <div class="table-card-container">
         <div class="table-header-tabs">
-            <button class="tab-btn active" onclick="filterStatus('all')">All Items</button>
-            <button class="tab-btn" onclick="filterStatus('low')">Low Stock (&lt;20)</button>
-            <button class="tab-btn" onclick="filterStatus('out')">Out of Stock</button>
+            <div class="table-tabs-left">
+                <button class="tab-btn active" onclick="filterStatus('all', this)">All Items</button>
+                <button class="tab-btn" onclick="filterStatus('low', this)">Low Stock (&lt;20)</button>
+                <button class="tab-btn" onclick="filterStatus('out', this)">Out of Stock</button>
+            </div>
+            <div class="table-tabs-right">
+                <span id="visibleCount" class="table-meta-pill">{{ medicines|length }} items</span>
+            </div>
         </div>
 
         <div class="table-wrapper">
@@ -95,9 +100,10 @@
                         <td>₹{{ "{:,.2f}".format(med.price) }}</td>
                         <td class="text-muted">₹{{ "{:,.2f}".format(med.purchase_price) }}</td>
                         <td>
-                            <div class="supplier-info">
-                                <i class="fas fa-truck text-muted"></i> ID: #{{ med.supplier_id }}
-                            </div>
+                            <span class="supplier-chip">
+                                <i class="fas fa-truck"></i>
+                                Supplier #{{ med.supplier_id }}
+                            </span>
                         </td>
                         <td class="text-right actions-cell">
                             <button class="action-btn edit" onclick='openEditModal({
@@ -268,6 +274,10 @@
         margin: 0 auto;
     }
 
+    .dashboard-overview {
+        margin-bottom: 18px;
+    }
+
     .header-section {
         display: flex;
         justify-content: space-between;
@@ -278,6 +288,11 @@
     .header-tools {
         display: flex;
         gap: 12px;
+        align-items: center;
+    }
+
+    .inventory-add-btn {
+        min-width: 156px;
     }
 
     .search-box {
@@ -380,33 +395,65 @@
         border: 1px solid var(--border-color);
         border-radius: 12px;
         overflow: hidden;
+        box-shadow: 0 12px 30px rgba(2, 6, 23, 0.14);
     }
 
     .table-header-tabs {
         display: flex;
-        padding: 0 20px;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
         border-bottom: 1px solid var(--border-color);
-        background: var(--bg-dark);
+        background: color-mix(in srgb, var(--bg-dark) 35%, var(--card-bg));
+        gap: 10px;
+    }
+
+    .table-tabs-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .table-tabs-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .table-meta-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        background: color-mix(in srgb, var(--card-bg) 82%, transparent);
     }
 
     .tab-btn {
-        padding: 16px 20px;
+        padding: 10px 14px;
         background: transparent;
-        border: none;
+        border: 1px solid transparent;
+        border-radius: 8px;
         color: var(--text-secondary);
         font-weight: 500;
         cursor: pointer;
-        border-bottom: 2px solid transparent;
         transition: all 0.2s;
     }
 
     .tab-btn:hover {
         color: var(--text-primary);
+        background: rgba(var(--primary-rgb), 0.08);
     }
 
     .tab-btn.active {
-        color: var(--primary-color);
-        border-bottom-color: var(--primary-color);
+        color: #fff;
+        background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+        box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
         font-weight: 600;
     }
 
@@ -429,6 +476,7 @@
         font-weight: 600;
         border-bottom: 1px solid var(--border-color);
         background: var(--bg-body);
+        white-space: nowrap;
     }
 
     .saas-table td {
@@ -440,6 +488,15 @@
 
     .saas-table tr:hover td {
         background: rgba(var(--primary-rgb), 0.02);
+    }
+
+    .saas-table tbody tr {
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .saas-table tbody tr:hover {
+        transform: translateY(-1px);
+        box-shadow: inset 4px 0 0 rgba(var(--primary-rgb), 0.6);
     }
 
     .product-info {
@@ -462,6 +519,24 @@
         padding: 4px 8px;
         border-radius: 4px;
         font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .supplier-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        background: color-mix(in srgb, var(--bg-dark) 24%, transparent);
+    }
+
+    .supplier-chip i {
+        color: var(--primary-color);
     }
 
     .status-badge {
@@ -488,11 +563,11 @@
     }
 
     .action-btn {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         border-radius: 6px;
-        border: 1px solid transparent;
-        background: transparent;
+        border: 1px solid var(--border-color);
+        background: color-mix(in srgb, var(--card-bg) 90%, transparent);
         cursor: pointer;
         color: var(--text-secondary);
         transition: all 0.2s;
@@ -507,10 +582,14 @@
 
     .action-btn.edit:hover {
         color: var(--primary-color);
+        border-color: rgba(var(--primary-rgb), 0.4);
+        box-shadow: 0 6px 12px rgba(var(--primary-rgb), 0.18);
     }
 
     .action-btn.delete:hover {
         color: var(--danger-color);
+        border-color: rgba(248, 113, 113, 0.45);
+        box-shadow: 0 6px 12px rgba(248, 113, 113, 0.18);
     }
 
     /* Modal Form Grid */
@@ -637,20 +716,33 @@
             width: 100%;
         }
 
+        .inventory-add-btn {
+            min-width: 0;
+        }
+
         .stats-grid {
             grid-template-columns: 1fr;
         }
 
         .table-header-tabs {
             overflow-x: auto;
-            padding: 0 10px;
+            padding: 10px;
             gap: 6px;
             -webkit-overflow-scrolling: touch;
+            flex-wrap: nowrap;
+        }
+
+        .table-tabs-left {
+            min-width: max-content;
+        }
+
+        .table-tabs-right {
+            min-width: max-content;
         }
 
         .tab-btn {
             white-space: nowrap;
-            padding: 12px 10px;
+            padding: 10px 12px;
             font-size: 0.85rem;
         }
 
@@ -736,13 +828,14 @@
                 }
             }
         }
+        updateVisibleCount();
     }
 
-    function filterStatus(status) {
+    function filterStatus(status, clickedBtn) {
         // Tab styling
         let tabs = document.getElementsByClassName('tab-btn');
         for (let t of tabs) t.classList.remove('active');
-        event.target.classList.add('active');
+        if (clickedBtn) clickedBtn.classList.add('active');
 
         // Row filtering
         let rows = document.getElementsByClassName('item-row');
@@ -756,7 +849,18 @@
                 row.style.display = (stock == 0) ? '' : 'none';
             }
         }
+        updateVisibleCount();
     }
+
+    function updateVisibleCount() {
+        const countEl = document.getElementById('visibleCount');
+        if (!countEl) return;
+        const rows = document.querySelectorAll('#inventoryTable tbody tr.item-row');
+        const visible = Array.from(rows).filter((r) => r.style.display !== 'none').length;
+        countEl.textContent = `${visible} items`;
+    }
+
+    document.addEventListener('DOMContentLoaded', updateVisibleCount);
 </script>
 {% endblock %}
 {% block extra_js %}
