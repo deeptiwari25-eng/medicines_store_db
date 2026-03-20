@@ -3,8 +3,8 @@ import os
 import json
 from flask import session
 
-# Add backend to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'backend')))
+# Add backend root to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app import create_app
 from app.database import get_db_connection

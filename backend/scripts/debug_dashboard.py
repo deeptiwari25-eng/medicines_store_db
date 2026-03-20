@@ -1,8 +1,8 @@
 import sys
 import os
 
-# Add the 'backend' folder to sys.path so we can import 'app.database'
-backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'backend'))
+# Add the backend root to sys.path so we can import 'app.database'
+backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if backend_path not in sys.path:
     sys.path.append(backend_path)
 
