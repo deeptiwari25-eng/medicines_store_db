@@ -1,7 +1,7 @@
 # Medical Store Management System
 
 ## LIVE DEMO (Vercel)
-**LIVE LINK: https://your-vercel-app-name.vercel.app**
+**LIVE LINK: https://medicines-store-db-yxfm.vercel.app/dashboard**
 
 Note: Agar aapka exact Vercel URL alag hai, is line ko update kar dena. Isko intentionally top par rakha gaya hai taki koi bhi directly open kar sake.
 
